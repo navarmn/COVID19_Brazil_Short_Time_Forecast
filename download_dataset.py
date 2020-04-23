@@ -5,8 +5,6 @@ from datetime import datetime
 import utils
 import requests, json
 
-from config import *
-
 # CREATE TEMP FOLDER
 TEMPFOLDER = './.temp/'
 if not os.path.exists(TEMPFOLDER):
