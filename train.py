@@ -75,12 +75,13 @@ for state in r.json():
                 df_state_yhat[column_name] = np.nan
                 df_state_yhat.update(new_column)
 
-            # Drop dataframe
+            # Save dataframe
             state_uf = state['uf']
             folder = os.path.join('results', f'{state_uf}')
             if not os.path.exists(folder):
-                os.mkdir(folder)
-
+                os.mkdir(folder)    
+            
+            df_state_yhat.drop(['yhat'], axis=1, inplace=True)
             filename = f'result-{state_uf}-{strategy}-{model_name}.csv'
             df_state_yhat.to_csv(os.path.join(folder, filename))
 
