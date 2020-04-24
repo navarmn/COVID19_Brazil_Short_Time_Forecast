@@ -80,6 +80,10 @@ for state in r.json():
                     model = HoltLearner(dayone=dayone, dayout=dayout, date_string='%d/%m/%Y', date_string_output='%d/%m/%Y')
                     model.fit(df_train)
                     df_out = model.predict(forecast=DAYS_TO_PREDICT)
+                    # Check if predictions are belows yesterday
+                    last_value = df_filtered.cases.iloc[y_train.shape[0]]
+                    df_out['yhat'] = utils.rescale_yhat(df_out['yhat'].values, last_value)
+
                 except:
                     error += 1
                     continue

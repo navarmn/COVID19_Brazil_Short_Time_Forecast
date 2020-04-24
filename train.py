@@ -66,6 +66,10 @@ for state in r.json():
                 df_out = utils.forecast(model, future=DAYS_TO_PREDICT, dayone=dayone, date_string='%d/%m/%Y', 
                                         dayout=dayout, date_string_output='%d/%m/%Y')
 
+                # Check if predictions are belows yesterday
+                last_value = df_filtered.cases.iloc[y_train.shape[0]]
+                df_out['yhat'] = utils.rescale_yhat(df_out['yhat'].values, last_value)
+
                 print(df_out)
                 df_out.set_index('ds', inplace=True)
                 # Set vars
