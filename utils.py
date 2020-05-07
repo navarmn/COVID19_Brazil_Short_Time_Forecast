@@ -24,9 +24,9 @@ def get_labels(df):
 
     return df_out.values
 
-def count_days(dayone='03-14-2020', date_string='%m-%d-%y'):
+def count_days(dayone='03-14-2020', dayout=datetime.today(), date_string='%m-%d-%y'):
     dayone = datetime.strptime(dayone, date_string)
-    days_list = np.arange(1, (datetime.today() - dayone).days + 2, 1).tolist()
+    days_list = np.arange(1, (dayout - dayone).days + 2, 1).tolist()
 
     return days_list
 
@@ -66,8 +66,12 @@ def forecast(model, future=1, dayone='03-14-2020', date_string='%m-%d-%Y', dayou
     return out
 
 
-def rescale_yhat(y_hat, last_value, factor=0.2):
+def rescale_yhat(y_hat, last_value, factor=0.2, force=False):
     if y_hat[0] < last_value:
+        diff = np.abs(y_hat[0] - last_value)
+        y_hat = y_hat + diff*(1 + factor)
+    
+    if force:
         diff = np.abs(y_hat[0] - last_value)
         y_hat = y_hat + diff*(1 + factor)
 

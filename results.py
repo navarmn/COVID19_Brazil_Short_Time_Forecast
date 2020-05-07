@@ -20,7 +20,7 @@ STATES = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE',
          'RJ', 'RN', 'RO', 'RS', 'RR', 'SC',
          'SE', 'SP', 'TO']
 
-MODELS = ['linear-regression', 'exponential-holt']
+MODELS = ['linear-regression', 'gaussian-process', 'mlp', 'svr', 'exponential-holt']
 
 STRATEGIES = [
     'aggregated',

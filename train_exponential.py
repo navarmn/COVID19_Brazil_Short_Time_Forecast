@@ -31,6 +31,8 @@ r = requests.get(url)
 states = {}
 
 
+STATES_2 = ['CE']
+
 for state in r.json():
     error = 0
     for model_name, _ in MODELS_EXPONENTIAL.items():
@@ -77,7 +79,12 @@ for state in r.json():
                 #     continue
 
                 try:
-                    model = HoltLearner(dayone=dayone, dayout=dayout, date_string='%d/%m/%Y', date_string_output='%d/%m/%Y')
+                    if model_name == 'holt':
+                        model = HoltLearner(dayone=dayone, dayout=dayout, date_string='%d/%m/%Y', date_string_output='%d/%m/%Y')
+                    elif model_name == 'arma':
+                        model = ARMALearner(dayone=dayone, dayout=dayout, date_string='%d/%m/%Y', date_string_output='%d/%m/%Y')
+                    
+
                     model.fit(df_train)
                     df_out = model.predict(forecast=DAYS_TO_PREDICT)
                     # Check if predictions are belows yesterday

@@ -1,9 +1,11 @@
 from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.svm import SVR
+from sklearn.neural_network import MLPRegressor
 from sklearn.linear_model import LinearRegression, BayesianRidge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import mean_squared_error
 from sklearn.pipeline import Pipeline
-from statsmodels.tsa.api import Holt
+from statsmodels.tsa.api import Holt, ARMA
 
 from sklearn.base import BaseEstimator
 
@@ -14,11 +16,16 @@ from utils import *
 
 
 MODELS = {
-    'linear-regression': LinearRegression()
+    'linear-regression': LinearRegression(),
+    'gaussian-process': GaussianProcessRegressor(),
+    'mlp': MLPRegressor(),
+    'svr': SVR(),
+
 }
 
 MODELS_EXPONENTIAL = {
-    'holt': 10
+    # 'arma': 10,
+    'holt': 10,
 }
 
 DAYS_TO_PREDICT = 14
@@ -65,6 +72,23 @@ class HoltLearner(BaseEstimator):
         df_out['yhat'] = series_out.values
 
         return df_out
+
+
+class ARMALearner(HoltLearner):
+    def __init__(self, dayone, dayout, order=(1,0), smoothing_slope=0.05, date_string='%m-%d-%Y', date_string_output='%a, %d %b %Y %H:%m:%S'):
+        self.dayone = dayone
+        self.dayout = dayout
+        self.date_string = date_string
+        self.date_string_output = date_string_output
+        self.order = order
+
+
+    def fit(self, df):
+        self.df = ajust_df(df)
+        self.model = ARMA(self.df['y'], self.order).fit() 
+
+        return self
+        
         
         
         
